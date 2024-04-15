@@ -19,6 +19,7 @@ builder.Services.AddDbContext<CoinCollectionContext>(options => {
     });
 builder.Services.AddScoped<ICoinRepository, CoinRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<IHistoryRepository, HistoryRepository>();
 
 builder.Services.AddSingleton<IMapper>(new MapperConfiguration(config =>
 {

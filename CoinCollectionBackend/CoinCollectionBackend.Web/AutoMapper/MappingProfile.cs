@@ -14,6 +14,7 @@ namespace CoinCollectionBackend.Web.AutoMapper
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Value));
             CreateMap<Coin, CoinGroupByCurrencyItemDto>();
             CreateMap<Currency, CurrencyDto>();
+            CreateMap<HistoryEntry, HistoryEntryByCoinDto>();
         }
     }
 }

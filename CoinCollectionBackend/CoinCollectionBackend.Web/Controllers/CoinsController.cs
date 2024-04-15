@@ -4,6 +4,7 @@ using CoinCollectionBackend.Database.Interfaces;
 using CoinCollectionBackend.Database.Repositories;
 using CoinCollectionBackend.Web.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace CoinCollectionBackend.Web.Controllers
 {
@@ -15,12 +16,14 @@ namespace CoinCollectionBackend.Web.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpGet("all")]
+        [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<CoinDto>>> Get()
         {
             return Ok(_mapper.Map<IEnumerable<CoinDto>>(await _coinRepository.GetAll()));
         }
 
         [HttpGet("by-id/{coinId}")]
+        [Produces("application/json")]
         public async Task<ActionResult<CoinDto>> GetById(int coinId)
         {
             Coin? coin = await _coinRepository.GetById(coinId);
@@ -34,6 +37,7 @@ namespace CoinCollectionBackend.Web.Controllers
         }
 
         [HttpGet("by-currency/{currencyId}")]
+        [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<CoinDto>>> GetGroupedByCurrency(int currencyId)
         {
             IEnumerable<Coin> coins = await _coinRepository.GetByCurrency(currencyId);
@@ -42,6 +46,7 @@ namespace CoinCollectionBackend.Web.Controllers
         }
 
         [HttpGet("by-currencies")]
+        [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<CoinGroupByCurrencyDto>>> GetGroupedByCurrency()
         {
             IDictionary<Currency, IEnumerable<Coin>> groups = await _coinRepository.GetGroupedByCurrency();
