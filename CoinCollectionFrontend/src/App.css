@@ -1,0 +1,7 @@
+#header {
+  margin-left: 50px;
+}
+
+.active > .mantine-Card-root {
+  background: lightgrey;
+}

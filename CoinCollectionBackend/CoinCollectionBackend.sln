@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34607.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinCollectionBackend.Database", "CoinCollectionBackend.Database\CoinCollectionBackend.Database.csproj", "{7BBDAE70-5CDF-4157-85F6-E84490338B69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinCollectionBackend.Web", "CoinCollectionBackend.Web\CoinCollectionBackend.Web.csproj", "{80ECA161-AC23-436F-A833-A0D83245FC50}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7BBDAE70-5CDF-4157-85F6-E84490338B69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BBDAE70-5CDF-4157-85F6-E84490338B69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BBDAE70-5CDF-4157-85F6-E84490338B69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BBDAE70-5CDF-4157-85F6-E84490338B69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80ECA161-AC23-436F-A833-A0D83245FC50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80ECA161-AC23-436F-A833-A0D83245FC50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80ECA161-AC23-436F-A833-A0D83245FC50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80ECA161-AC23-436F-A833-A0D83245FC50}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21ED2CFB-DD9E-4134-8E17-65D579D8365C}
+	EndGlobalSection
+EndGlobal

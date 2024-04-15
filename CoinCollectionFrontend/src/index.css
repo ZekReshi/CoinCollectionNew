@@ -1,0 +1,27 @@
+a {
+  font-weight: 500;
+  text-decoration: inherit;
+}
+
+a:link {
+  text-decoration: inherit;
+  color: #213547;
+}
+
+a:visited {
+  text-decoration: inherit;
+  color: #213547;
+}
+
+a:hover {
+  text-decoration: inherit;
+}
+
+a:active {
+  text-decoration: inherit;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}

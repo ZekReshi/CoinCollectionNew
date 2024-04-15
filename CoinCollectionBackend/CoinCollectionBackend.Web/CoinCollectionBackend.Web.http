@@ -1,0 +1,6 @@
+@CoinCollectionBackend.Web_HostAddress = http://localhost:5000
+
+GET {{CoinCollectionBackend.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
