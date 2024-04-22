@@ -7,8 +7,7 @@ import CoinList from "./CoinList";
 function CoinAccordion() {
     const [coinGroups, setCoinGroups] = useState<CoinGroupByCurrencyDto[]>([])
 
-    //const getCoinsByCurrenciesQuery = 
-    useQuery("getCoinsByCurrencies", () => CoinsService.getCoinsByCurrencies().then(data => setCoinGroups(data)));
+    useQuery("getCoinsByCurrencies", () => CoinsService.getCoinsByCurrencies().then(data => setCoinGroups(data)))
 
     const coinGroupAccordionItems = useMemo(() => coinGroups.map(
         group => (

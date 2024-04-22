@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { CoinDto, CoinsService } from "../api"
-import { useEffect, useState } from "react";
-import { Button, Grid, Group, Stack } from "@mantine/core";
+import { useState } from "react";
+import { Button, Grid, Group } from "@mantine/core";
 
 type Props = {
     coinId: number
@@ -10,9 +10,9 @@ type Props = {
 function CoinDetails({
     coinId
 }: Props) {
-    const [coin, setCoin] = useState<CoinDto>();
+    const [coin, setCoin] = useState<CoinDto>()
 
-    const getCoinByIdQuery = useQuery(["getCoinById", coinId], () => CoinsService.getCoinsById(coinId).then(data => setCoin(data)));
+    useQuery(["getCoinById", coinId], () => CoinsService.getCoinsById(coinId).then(data => setCoin(data)))
 
     const mock = () => {
         setCoin({
@@ -23,7 +23,7 @@ function CoinDetails({
         })
     }
 
-    return !getCoinByIdQuery.isError ? (
+    return coin ? (
         <Grid columns={2}>
             <Grid.Col span={1}>
                 <Grid columns={2}>
