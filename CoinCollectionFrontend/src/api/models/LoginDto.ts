@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type CoinDto = {
-    id?: number;
-    value?: number;
-    year?: number;
-    currencyId?: number;
+export type LoginDto = {
+    user?: string | null;
+    password?: string | null;
 };
 

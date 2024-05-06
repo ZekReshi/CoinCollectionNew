@@ -8,7 +8,7 @@ namespace CoinCollectionBackend.Web.AutoMapper
     {
         public MappingProfile() { 
             CreateMap<Coin, CoinDto>()
-                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency.Name));
+                .ReverseMap();
             CreateMap<KeyValuePair<Currency, IEnumerable<Coin>>, CoinGroupByCurrencyDto>()
                 .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Key))
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Value));
