@@ -11,6 +11,7 @@
     "generate:api": "npx dotenv -- cross-env-shell \"npx openapi -i swagger.json -o src/api -c fetch\""
   },
   "dependencies": {
+    "@mantine/charts": "^7.8.0",
     "@mantine/core": "^7.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
