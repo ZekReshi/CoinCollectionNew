@@ -14,7 +14,7 @@ export class HistoryService {
      */
     public static getHistoryById(
         coinId: number,
-    ): CancelablePromise<HistoryEntryByCoinDto> {
+    ): CancelablePromise<Array<HistoryEntryByCoinDto>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/History/by-id/{coinId}',

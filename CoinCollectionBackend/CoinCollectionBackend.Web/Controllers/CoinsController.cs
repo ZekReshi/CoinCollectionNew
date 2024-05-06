@@ -92,14 +92,13 @@ namespace CoinCollectionBackend.Web.Controllers
 
         [HttpGet("by-id/{coinId}/front")]
         [Produces("image/png")]
-        public async Task<FileContentResult> GetFront(int coinId)
+        public async Task<ActionResult> GetFront(int coinId)
         {
-            string path = Path.Combine($"{_configuration["Images"]}, {coinId}f.png");
+            string path = Path.Combine(_configuration["Images"], $"{coinId}f.png");
 
             if (!System.IO.File.Exists(path))
             {
-                Byte[] error = await System.IO.File.ReadAllBytesAsync($"{_configuration["Images"]}\\404.png");
-                return File(error, "image/jpeg");
+                return NotFound();
             }
 
             Byte[] b = await System.IO.File.ReadAllBytesAsync(path);       
@@ -110,7 +109,7 @@ namespace CoinCollectionBackend.Web.Controllers
         [Produces("image/png")]
         public async Task<ActionResult> GetBack(int coinId)
         {
-            string path = Path.Combine($"{_configuration["Images"]}, {coinId}b.png");
+            string path = Path.Combine(_configuration["Images"], $"{coinId}b.png");
 
             if (!System.IO.File.Exists(path))
             {
@@ -123,9 +122,10 @@ namespace CoinCollectionBackend.Web.Controllers
 
         [HttpPost("by-id/{coinId}/front")]
         [Consumes("image/png")]
+        [Authorize]
         public async Task<ActionResult> PostFront(int coinId, [FromBody] byte[] image)
         {
-            string path = Path.Combine($"{_configuration["Images"]}, {coinId}f.png");
+            string path = Path.Combine(_configuration["Images"], $"{coinId}f.png");
 
             await System.IO.File.WriteAllBytesAsync(path, image);
 
@@ -134,9 +134,10 @@ namespace CoinCollectionBackend.Web.Controllers
 
         [HttpPost("by-id/{coinId}/back")]
         [Consumes("image/png")]
+        [Authorize]
         public async Task<ActionResult> PostBack(int coinId, [FromBody] byte[] image)
         {
-            string path = Path.Combine($"{_configuration["Images"]}, {coinId}b.png");
+            string path = Path.Combine(_configuration["Images"], $"{coinId}b.png");
 
             await System.IO.File.WriteAllBytesAsync(path, image);
 

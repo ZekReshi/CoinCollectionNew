@@ -1,5 +1,6 @@
-import { AppShell, Button, Card, Group, PasswordInput, Popover, Stack, TextInput } from "@mantine/core"
+import { AppShell, Card, Group, Stack } from "@mantine/core"
 import { NavLink, Outlet } from "react-router-dom"
+import LoginPopover from "../components/LoginPopover";
 
 function Layout() {
     return (
@@ -9,28 +10,7 @@ function Layout() {
                     <NavLink to="/">
                         <h1>Coin Collection</h1>
                     </NavLink>
-                    {
-                        false ?
-                        <Button>
-                            Log out
-                        </Button> :
-                        <Popover>
-                            <Popover.Target>
-                                <Button>
-                                    Log in
-                                </Button>
-                            </Popover.Target>
-                            <Popover.Dropdown>
-                                <Stack>
-                                    <TextInput label="Username" />
-                                    <PasswordInput label="Password" />
-                                    <Button>
-                                        Submit
-                                    </Button>
-                                </Stack>
-                            </Popover.Dropdown>
-                        </Popover>
-                    }
+                    <LoginPopover />
                 </Group>
             </AppShell.Header>
 

@@ -17,7 +17,7 @@ namespace CoinCollectionBackend.Web.Controllers
 
         [HttpGet("by-id/{coinId}")]
         [Produces("application/json")]
-        public async Task<ActionResult<HistoryEntryByCoinDto>> GetByCoinId(int coinId)
+        public async Task<ActionResult<IEnumerable<HistoryEntryByCoinDto>>> GetByCoinId(int coinId)
         {
             return Ok(_mapper.Map<IEnumerable<HistoryEntryByCoinDto>>(await _historyRepository.GetByCoinId(coinId)));
         }

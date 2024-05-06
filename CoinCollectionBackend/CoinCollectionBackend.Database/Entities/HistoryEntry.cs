@@ -9,7 +9,6 @@ namespace CoinCollectionBackend.Database.Entities
     public class HistoryEntry
     {
         public int Id { get; set; }
-        public int Currency { get; set; }
         public int CurrencyId { get; set; }
         public int Value { get; set; }
         public int Year { get; set; }

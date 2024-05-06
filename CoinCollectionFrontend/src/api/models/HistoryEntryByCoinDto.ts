@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type HistoryEntryByCoinDto = {
-    date?: string;
+    dateTime?: string;
     entryValue?: number;
 };
 

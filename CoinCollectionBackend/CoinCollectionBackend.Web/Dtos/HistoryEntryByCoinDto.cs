@@ -2,7 +2,7 @@
 {
     public class HistoryEntryByCoinDto
     {
-        public DateTime Date { get; set; }
+        public DateTime DateTime { get; set; }
         public double EntryValue { get; set; }
     }
 }
