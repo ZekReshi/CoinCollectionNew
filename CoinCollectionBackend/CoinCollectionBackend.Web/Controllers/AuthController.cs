@@ -1,27 +1,45 @@
-﻿using CoinCollectionBackend.Web.Dtos;
+﻿using CoinCollectionBackend.Database.Entities;
+using CoinCollectionBackend.Database.Interfaces;
+using CoinCollectionBackend.Database.Repositories;
+using CoinCollectionBackend.Web.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace CoinCollectionBackend.Web.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController(IConfiguration configuration) : ControllerBase
+    public class AuthController(IUserRepository userRepository, IConfiguration configuration) : ControllerBase
     {
+        private readonly IUserRepository _userRepository = userRepository;
         private readonly IConfiguration _configuration = configuration;
 
         [HttpPost]
-        public IActionResult PostLogin([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> PostLogin([FromBody] LoginDto loginDto)
         {
+            User? user = await _userRepository.GetByName(loginDto.User);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(loginDto.Password), user.Salt, 16, HashAlgorithmName.SHA256, 128);
+            if (!hash.SequenceEqual(user.PWHash))
+            {
+                return BadRequest();
+            }
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            Claim[] claims = [new(JwtRegisteredClaimNames.Name, loginDto.User)];
+            Claim[] claims = [new(JwtRegisteredClaimNames.Name, user.Name)];
 
             var Sectoken = new JwtSecurityToken(_configuration["Jwt:Issuer"],
               _configuration["Jwt:Issuer"],

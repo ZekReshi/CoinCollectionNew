@@ -10,7 +10,7 @@ namespace CoinCollectionBackend.Database.Entities
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public required string PWHash { get; set; }
-        public required string Salt { get; set; }
+        public required byte[] PWHash { get; set; }
+        public required byte[] Salt { get; set; }
     }
 }

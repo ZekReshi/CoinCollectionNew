@@ -13,5 +13,6 @@ namespace CoinCollectionBackend.Database.Context
         public DbSet<Coin> Coins { get; set; }
         public DbSet<Currency> Currencies {  get; set; }
         public DbSet<HistoryEntry> HistoryEntries { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
