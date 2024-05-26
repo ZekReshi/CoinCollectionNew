@@ -29,14 +29,30 @@ namespace CoinCollectionBackend.Web.Controllers
             Response.Headers.TryAdd("Content-Type", "text/event-stream");
             Response.Headers.TryAdd("Cache-Control", "no-cache");
             Response.Headers.TryAdd("Connection", "keep-alive");
+
             int id = coinId;
             while (id < coinId + 5)
             {
-                await Response.WriteAsync("data:dummy");
+                await Response.WriteAsync("event: data");
+                await Response.WriteAsync("\n");
+
+                HistoryEntryByCoinDto historyEntryByCoinDto = new HistoryEntryByCoinDto
+                {
+                    DateTime = DateTime.Now,
+                    EntryValue = id
+                };
+
+                await Response.WriteAsync("data: 1");
                 await Response.WriteAsync("\n\n");
                 await Response.Body.FlushAsync();
                 await Task.Delay(10000);
+                id++;
             }
+            await Response.WriteAsync("event: close");
+            await Response.WriteAsync("\n");
+            await Response.WriteAsync("data: close");
+            await Response.WriteAsync("\n\n");
+            await Response.Body.FlushAsync();
         }
     }
 }

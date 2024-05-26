@@ -10,28 +10,46 @@ type Props = {
 function CoinGraph({
     coinId
 }: Props) {
-    const [sseOpen, setSseOpen] = useState<boolean>(true)
-    const [data, setData] = useState<HistoryEntryByCoinDto[]>()
+    const [graphData, setGraphData] = useState<HistoryEntryByCoinDto[]>()
 
     useEffect(() => {
         HistoryService.getHistoryById(coinId).then((data) => {
-            setData(data)
+            setGraphData(data)
         })
     }, [coinId])
 
-    /*let sse: EventSource | undefined = new EventSource('https://localhost:44353/Coins/by-id/' + coinId + "/history")
-    sse.onmessage = data => {
-        console.log(data.data)
-    }
-    sse.onerror = () => {
-        console.log("ERROR")
+    useEffect(() => {
         sse?.close()
-        sse = undefined
-        setSseOpen(false)
-    }*/
+        console.log("SSE OPENING")
+        sse = new EventSource('https://localhost:44353/History/by-id/' + coinId + "/updates")
+        sse.onopen = () => {
+            console.log("SSE OPEN")
+        }
+        sse.onerror = () => {
+            console.log("ERROR")
+            sse?.close()
+            sse = undefined
+        }
+        sse.addEventListener("data", (e) => {
+            console.log("data", e.data)
+            graphData?.push(JSON.parse(e.data))
+            console.log(graphData)
+        })
+        sse.addEventListener("close", (e) => {
+            console.log("close", e.data)
+            sse?.close()
+            sse = undefined
+        })
+    }, [graphData])
+
+    let sse: EventSource | undefined = undefined;
+
+    window.onbeforeunload = () => {
+        sse?.close()
+    }
 
     const mock = () => {
-        setData([
+        setGraphData([
             {"dateTime":"2024-01-01T00:00:00","entryValue":2},
             {"dateTime":"2024-02-01T00:00:00","entryValue":4},
             {"dateTime":"2024-03-01T00:00:00","entryValue":3},
@@ -40,10 +58,10 @@ function CoinGraph({
         ]) 
     }
 
-    return data && data.length > 0 ? (
+    return graphData && graphData.length > 0 ? (
         <LineChart 
-            h={"70vh"}
-            data={data}
+            h="70vh"
+            data={graphData}
             dataKey="dateTime"
             series={[{
                 name: 'entryValue',

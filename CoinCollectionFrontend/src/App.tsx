@@ -6,9 +6,11 @@ import Home from './pages/Home'
 import Details from './pages/Details'
 import Statistics from './pages/Statistics'
 import NotFound from './pages/NotFound'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
+    <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -20,6 +22,8 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster />
+    </>
   )
 }
 

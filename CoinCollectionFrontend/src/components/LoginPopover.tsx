@@ -1,22 +1,33 @@
 import { Button, PasswordInput, Popover, Stack, TextInput } from "@mantine/core"
 import { useState } from "react";
 import { AuthService } from "../api";
+import toast from "react-hot-toast";
+import { useAuth } from "./AuthProvider";
 
 function LoginPopover() {
     const [user, setUser] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const login = () => {
+    const auth = useAuth();
+
+    const login = (event: any) => {
+        event.preventDefault()
         AuthService.postAuth({
             user: user,
             password: password
-        }).then(() => {
-            console.log("logged in successfully")
-        })
+        }).then((data) => {
+            auth.login(data)
+            toast("Logged in successfully")
+            setUser("")
+            setPassword("")
+        }).catch(() => toast("Login Error"))
     }
 
-    return false ?
-        <Button>
+    return auth.isLoggedIn ?
+        <Button onClick={() => {
+            auth.logout()
+            toast("Logged out successfully")
+            }}>
             Log out
         </Button> :
         <Popover>
@@ -26,19 +37,21 @@ function LoginPopover() {
                 </Button>
             </Popover.Target>
             <Popover.Dropdown>
-                <Stack>
-                    <TextInput 
-                        label="Username" 
-                        value={user}
-                        onChange={(event) => setUser(event.currentTarget.value)} />
-                    <PasswordInput 
-                        label="Password" 
-                        value={password}
-                        onChange={(event) => setPassword(event.currentTarget.value)} />
-                    <Button onClick={login}>
-                        Submit
-                    </Button>
-                </Stack>
+                <form onSubmit={login} action="">
+                    <Stack>
+                        <TextInput 
+                            label="Username" 
+                            value={user}
+                            onChange={(event) => setUser(event.currentTarget.value)} />
+                        <PasswordInput 
+                            label="Password" 
+                            value={password}
+                            onChange={(event) => setPassword(event.currentTarget.value)} />
+                        <Button type="submit">
+                            Submit
+                        </Button>
+                    </Stack>
+                </form>
             </Popover.Dropdown>
         </Popover>
 }

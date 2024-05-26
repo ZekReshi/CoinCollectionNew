@@ -101,7 +101,7 @@ namespace CoinCollectionBackend.Web.Controllers
                 return NotFound();
             }
 
-            Byte[] b = await System.IO.File.ReadAllBytesAsync(path);       
+            byte[] b = await System.IO.File.ReadAllBytesAsync(path);       
             return File(b, "image/jpeg");
         }
 
@@ -123,9 +123,13 @@ namespace CoinCollectionBackend.Web.Controllers
         [HttpPost("by-id/{coinId}/front")]
         [Consumes("image/png")]
         [Authorize]
-        public async Task<ActionResult> PostFront(int coinId, [FromBody] byte[] image)
+        public async Task<ActionResult> PostFront(int coinId)
         {
             string path = Path.Combine(_configuration["Images"], $"{coinId}f.png");
+
+            string base64 = await new StreamReader(Request.Body).ReadToEndAsync();
+
+            byte[] image = Convert.FromBase64String(base64);
 
             await System.IO.File.WriteAllBytesAsync(path, image);
 
@@ -135,9 +139,13 @@ namespace CoinCollectionBackend.Web.Controllers
         [HttpPost("by-id/{coinId}/back")]
         [Consumes("image/png")]
         [Authorize]
-        public async Task<ActionResult> PostBack(int coinId, [FromBody] byte[] image)
+        public async Task<ActionResult> PostBack(int coinId)
         {
             string path = Path.Combine(_configuration["Images"], $"{coinId}b.png");
+
+            string base64 = await new StreamReader(Request.Body).ReadToEndAsync();
+
+            byte[] image = Convert.FromBase64String(base64);
 
             await System.IO.File.WriteAllBytesAsync(path, image);
 
