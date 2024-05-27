@@ -30,7 +30,7 @@ function AddCoinPopover() {
                 </Button>
             </Popover.Target>
             <Popover.Dropdown>
-                <form onSubmit={addCoin} action="">
+                <form onSubmit={addCoin}>
                     <Stack>
                         <Select 
                             label="Currency" 

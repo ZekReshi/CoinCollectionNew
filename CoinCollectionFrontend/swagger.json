@@ -339,16 +339,6 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "image/png": {
-              "schema": {
-                "type": "string",
-                "format": "byte"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success"
@@ -393,16 +383,6 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "image/png": {
-              "schema": {
-                "type": "string",
-                "format": "byte"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success"
@@ -488,16 +468,31 @@
         }
       }
     },
-    "/History/by-id/{coinId}": {
+    "/History": {
       "get": {
         "tags": [
           "History"
         ],
         "parameters": [
           {
-            "name": "coinId",
-            "in": "path",
-            "required": true,
+            "name": "currencyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -521,16 +516,31 @@
         }
       }
     },
-    "/History/by-id/{coinId}/updates": {
+    "/History/updates": {
       "get": {
         "tags": [
           "History"
         ],
         "parameters": [
           {
-            "name": "coinId",
-            "in": "path",
-            "required": true,
+            "name": "currencyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -620,7 +630,7 @@
       "HistoryEntryByCoinDto": {
         "type": "object",
         "properties": {
-          "date": {
+          "dateTime": {
             "type": "string",
             "format": "date-time"
           },

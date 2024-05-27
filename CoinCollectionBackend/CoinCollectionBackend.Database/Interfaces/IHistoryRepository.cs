@@ -9,6 +9,6 @@ namespace CoinCollectionBackend.Database.Interfaces
 {
     public interface IHistoryRepository
     {
-        Task<IEnumerable<HistoryEntry>> GetByCoinId(int coinId);
+        Task<IEnumerable<HistoryEntry>> GetByCoin(Coin coin);
     }
 }

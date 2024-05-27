@@ -37,7 +37,7 @@ function LoginPopover() {
                 </Button>
             </Popover.Target>
             <Popover.Dropdown>
-                <form onSubmit={login} action="">
+                <form onSubmit={login}>
                     <Stack>
                         <TextInput 
                             label="Username" 

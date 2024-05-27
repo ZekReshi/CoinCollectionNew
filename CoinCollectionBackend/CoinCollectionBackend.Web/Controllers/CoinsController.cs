@@ -5,6 +5,7 @@ using CoinCollectionBackend.Database.Repositories;
 using CoinCollectionBackend.Web.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Text.Json;
 
 namespace CoinCollectionBackend.Web.Controllers
@@ -86,6 +87,17 @@ namespace CoinCollectionBackend.Web.Controllers
             }
 
             coin = await _coinRepository.DeleteCoin(coin);
+
+            string pathFront = Path.Combine(_configuration["Images"], $"{coinId}f.png");
+            string pathBack = Path.Combine(_configuration["Images"], $"{coinId}b.png");
+            if (System.IO.File.Exists(pathFront))
+            {
+                System.IO.File.Delete(pathFront);
+            }
+            if (System.IO.File.Exists(pathBack))
+            {
+                System.IO.File.Delete(pathBack);
+            }
 
             return Ok(_mapper.Map<CoinDto>(coin));
         }

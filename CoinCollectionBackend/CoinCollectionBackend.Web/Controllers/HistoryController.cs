@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CoinCollectionBackend.Database.Entities;
 using CoinCollectionBackend.Database.Interfaces;
 using CoinCollectionBackend.Database.Repositories;
 using CoinCollectionBackend.Web.Dtos;
@@ -15,23 +16,28 @@ namespace CoinCollectionBackend.Web.Controllers
         private readonly IHistoryRepository _historyRepository = historyRepository;
         private readonly IMapper _mapper = mapper;
 
-        [HttpGet("by-id/{coinId}")]
+        [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult<IEnumerable<HistoryEntryByCoinDto>>> GetByCoinId(int coinId)
+        public async Task<ActionResult<IEnumerable<HistoryEntryByCoinDto>>> GetByCoin([FromQuery] int currencyId, [FromQuery] int value, [FromQuery] int year)
         {
-            return Ok(_mapper.Map<IEnumerable<HistoryEntryByCoinDto>>(await _historyRepository.GetByCoinId(coinId)));
+            return Ok(_mapper.Map<IEnumerable<HistoryEntryByCoinDto>>(await _historyRepository.GetByCoin(_mapper.Map<Coin>(new CoinDto
+            {
+                CurrencyId = currencyId,
+                Value = value,
+                Year = year
+            }))));
         }
 
-        [HttpGet("by-id/{coinId}/updates")]
+        [HttpGet("updates")]
         [Produces("text/event-stream")]
-        public async Task GetUpdatesByCoinId(int coinId)
+        public async Task GetUpdatesByCoin([FromQuery] int currencyId, [FromQuery] int value, [FromQuery] int year)
         {
             Response.Headers.TryAdd("Content-Type", "text/event-stream");
             Response.Headers.TryAdd("Cache-Control", "no-cache");
             Response.Headers.TryAdd("Connection", "keep-alive");
 
-            int id = coinId;
-            while (id < coinId + 5)
+            int id = 0;
+            while (id < 5)
             {
                 await Response.WriteAsync("event: data");
                 await Response.WriteAsync("\n");
