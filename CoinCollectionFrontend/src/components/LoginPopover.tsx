@@ -5,8 +5,8 @@ import toast from "react-hot-toast";
 import { useAuth } from "./AuthProvider";
 
 function LoginPopover() {
-    const [user, setUser] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [user, setUser] = useState("")
+    const [password, setPassword] = useState("")
 
     const auth = useAuth();
 

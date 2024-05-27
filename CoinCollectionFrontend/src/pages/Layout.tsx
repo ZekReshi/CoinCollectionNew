@@ -1,8 +1,12 @@
 import { AppShell, Card, Group, Stack } from "@mantine/core"
 import { NavLink, Outlet } from "react-router-dom"
 import LoginPopover from "../components/LoginPopover";
+import AddCoinPopover from "../components/AddCoinPopover";
+import { useAuth } from "../components/AuthProvider";
 
 function Layout() {
+    const auth = useAuth()
+
     return (
         <AppShell padding='xl' header={{height: 100}} navbar={{width: 200, breakpoint: 'sm'}}>
             <AppShell.Header>
@@ -10,7 +14,10 @@ function Layout() {
                     <NavLink to="/">
                         <h1>Coin Collection</h1>
                     </NavLink>
-                    <LoginPopover />
+                    <Group>
+                        {auth.isLoggedIn && <AddCoinPopover />}
+                        <LoginPopover />
+                    </Group>
                 </Group>
             </AppShell.Header>
 
@@ -26,35 +33,19 @@ function Layout() {
                             </Card>
                         </NavLink>
                         <NavLink 
-                            to="/details/1"
-                            className={({ isActive, isPending }) =>
-                            isPending ? "pending" : isActive ? "active" : ""}>
-                            <Card withBorder>
-                                Details of Coin #1
-                            </Card>
-                        </NavLink>
-                        <NavLink 
-                            to="/details/2"
-                            className={({ isActive, isPending }) =>
-                            isPending ? "pending" : isActive ? "active" : ""}>
-                            <Card withBorder>
-                                Details of Coin #2
-                            </Card>
-                        </NavLink>
-                        <NavLink 
-                            to="/details/3"
-                            className={({ isActive, isPending }) =>
-                            isPending ? "pending" : isActive ? "active" : ""}>
-                            <Card withBorder>
-                                Details of Coin #3
-                            </Card>
-                        </NavLink>
-                        <NavLink 
                             to="/statistics"
                             className={({ isActive, isPending }) =>
                             isPending ? "pending" : isActive ? "active" : ""}>
                             <Card withBorder>
                                 Statistics
+                            </Card>
+                        </NavLink>
+                        <NavLink 
+                            to="/about"
+                            className={({ isActive, isPending }) =>
+                            isPending ? "pending" : isActive ? "active" : ""}>
+                            <Card withBorder>
+                                About
                             </Card>
                         </NavLink>
                     </Stack>

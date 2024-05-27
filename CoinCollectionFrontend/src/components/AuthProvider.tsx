@@ -12,6 +12,8 @@ type Props = {
 export const AuthProvider = ({ children }: Props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'))
 
+    OpenAPI.TOKEN = localStorage.getItem('token') ?? undefined
+
     const login = (t: string) => {
         localStorage.setItem('token', t)
         setIsLoggedIn(true)

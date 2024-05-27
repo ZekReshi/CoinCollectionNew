@@ -7,6 +7,7 @@ import Details from './pages/Details'
 import Statistics from './pages/Statistics'
 import NotFound from './pages/NotFound'
 import { Toaster } from 'react-hot-toast'
+import About from './pages/About'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="details/:id" element={<Details />} />
             <Route path="statistics" element={<Statistics />} />
             <Route path="statistics/:id" element={<Statistics />} />
+            <Route path="about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
