@@ -1,5 +1,5 @@
 import { Button, NumberInput, Popover, Select, Stack } from "@mantine/core"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CoinsService, CurrenciesService, CurrencyDto } from "../api";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
@@ -19,6 +19,12 @@ function AddCoinPopover() {
         }).then(() => toast("Coin added successfully")
         ).catch(() => toast("Error adding coin"))
     }
+
+    useEffect(() => {
+        if (currencies) {
+            setCurrency(currencies[0].name ?? "")
+        }
+    }, [currencies])
     
     useQuery(["getCurrencies"], () => CurrenciesService.getCurrenciesAll().then(data => setCurrencies(data)))
 
@@ -36,6 +42,7 @@ function AddCoinPopover() {
                             label="Currency" 
                             data={currencies?.map(c => c.name ?? "")}
                             value={currency}
+                            allowDeselect={false}
                             onChange={(v) => setCurrency(v ?? "")} />
                         <NumberInput 
                             label="Value" 
