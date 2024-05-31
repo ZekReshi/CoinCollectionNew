@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { CoinsService, CurrenciesService, CurrencyDto } from "../api";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
+import { useAuth } from "./AuthProvider";
 
 function AddCoinPopover() {
     const [currency, setCurrency] = useState("")
@@ -10,14 +11,24 @@ function AddCoinPopover() {
     const [year, setYear] = useState(0)
     const [currencies, setCurrencies] = useState<CurrencyDto[]>()
 
+    const auth = useAuth()
+
     const addCoin = (event: any) => {
         event.preventDefault()
         CoinsService.postCoins({
             currencyId: currencies?.find(c => c.name == currency)?.id,
             value: value,
             year: year
-        }).then(() => toast.success("Coin added successfully")
-        ).catch(() => toast.error("Error adding coin"))
+        }).then(
+            () => toast.success("Coin added successfully"),
+            (e) => {
+                if (e.status == 401) {
+                    toast.error("Please login again")
+                    auth.logout()
+                } else {
+                    toast.error("Error adding coin")
+                }
+            })
     }
 
     useEffect(() => {

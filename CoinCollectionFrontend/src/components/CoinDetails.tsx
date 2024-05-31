@@ -50,6 +50,13 @@ function CoinDetails({
                 toast('Successfully uploaded image')
                 setFront(null)
                 setFrontSrc(frontSrc.endsWith('/') ? frontSrcBase : frontSrcBase + '/')
+            }, (e) => {
+                if (e.status == 401) {
+                    toast.error("Please login again")
+                    auth.logout()
+                } else {
+                    toast.error("Error uploading image")
+                }
             })
         }
     }
@@ -60,11 +67,19 @@ function CoinDetails({
         reader.onload = () => {
             let file = reader.result as string
             let base64 = file.split(',')[1]
-            CoinsService.postCoinsByIdBack(coinId, base64).then(() => {
-                toast('Successfully uploaded image')
-                setBack(null)
-                setBackSrc(backSrc.endsWith('/') ? backSrcBase : backSrcBase + '/')
-            })
+            CoinsService.postCoinsByIdBack(coinId, base64).then(
+                () => {
+                    toast.success('Successfully uploaded image')
+                    setBack(null)
+                    setBackSrc(backSrc.endsWith('/') ? backSrcBase : backSrcBase + '/')
+                }, (e) => {
+                    if (e.status == 401) {
+                        toast.error("Please login again")
+                        auth.logout()
+                    } else {
+                        toast.error("Error uploading image")
+                    }
+                })
         }
     }
 
@@ -76,7 +91,14 @@ function CoinDetails({
             year: year
         }).then(
             () => toast("Coin updated successfully"), 
-            () => toast("Error while updating coin"))
+            (e) => {
+                if (e.status == 401) {
+                    toast.error("Please login again")
+                    auth.logout()
+                } else {
+                    toast.error("Error updating coin")
+                }
+            })
     }
 
     const navigate = useNavigate()
@@ -86,8 +108,14 @@ function CoinDetails({
             () => {
                 toast("Coin deleted successfully")
                 navigate("/")
-            }, 
-            () => toast("Error while deleting coin"))
+            }, (e) => {
+                if (e.status == 401) {
+                    toast.error("Please login again")
+                    auth.logout()
+                } else {
+                    toast.error("Error deleting coin")
+                }
+            })
         setDeleteOpened(false)
     }
 
