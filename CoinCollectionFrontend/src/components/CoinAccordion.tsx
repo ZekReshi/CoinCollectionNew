@@ -12,16 +12,16 @@ function CoinAccordion() {
     const coinGroupAccordionItems = useMemo(() => coinGroups.map(
         group => (
             <>
-                <Accordion.Item key={group.currency?.id} value={group.currency?.name ?? ""}>
-                    <Accordion.Control>
-                        {group.currency?.name}
-                    </Accordion.Control>
-                    <Accordion.Panel>
-                        <Card>
-                            <CoinList coins={group.items ?? []} />
-                        </Card>
-                    </Accordion.Panel>
-                </Accordion.Item>
+            <Accordion.Item key={group.currency?.id} value={group.currency?.name ?? ""}>
+                <Accordion.Control>
+                    {group.currency?.name}
+                </Accordion.Control>
+                <Accordion.Panel>
+                    <Card>
+                        <CoinList coins={group.items ?? []} />
+                    </Card>
+                </Accordion.Panel>
+            </Accordion.Item>
             </>
         )
     ), [coinGroups])

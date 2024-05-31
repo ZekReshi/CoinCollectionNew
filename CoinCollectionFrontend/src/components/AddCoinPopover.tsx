@@ -16,8 +16,8 @@ function AddCoinPopover() {
             currencyId: currencies?.find(c => c.name == currency)?.id,
             value: value,
             year: year
-        }).then(() => toast("Coin added successfully")
-        ).catch(() => toast("Error adding coin"))
+        }).then(() => toast.success("Coin added successfully")
+        ).catch(() => toast.error("Error adding coin"))
     }
 
     useEffect(() => {
@@ -43,7 +43,8 @@ function AddCoinPopover() {
                             data={currencies?.map(c => c.name ?? "")}
                             value={currency}
                             allowDeselect={false}
-                            onChange={(v) => setCurrency(v ?? "")} />
+                            onChange={(v) => setCurrency(v ?? "")}
+                            comboboxProps={{ withinPortal: false }} />
                         <NumberInput 
                             label="Value" 
                             value={value}

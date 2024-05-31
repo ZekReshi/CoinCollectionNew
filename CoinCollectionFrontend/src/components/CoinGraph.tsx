@@ -1,7 +1,7 @@
 import { LineChart } from "@mantine/charts"
 import { useEffect, useState } from "react"
 import { CoinDto, CoinsService, CurrenciesService, CurrencyDto, HistoryEntryByCoinDto, HistoryService } from "../api"
-import { Button, Grid, Group, NumberInput, Select, Stack } from "@mantine/core"
+import { Button, Grid, Group, NumberInput, Select } from "@mantine/core"
 import { useQuery } from "react-query"
 
 type Props = {
@@ -16,7 +16,9 @@ function CoinGraph({
     const [value, setValue] = useState(0)
     const [year, setYear] = useState(0)
     const [currencies, setCurrencies] = useState<CurrencyDto[]>()
-    const [graphData, setGraphData] = useState<HistoryEntryByCoinDto[]>()
+    const [historyData, setHistoryData] = useState<HistoryEntryByCoinDto[]>()
+    const [graphData, setGraphData] = useState<HistoryEntryByCoinDto[]>([])
+    const [sse, setSse] = useState<EventSource | undefined>(undefined)
     
     useQuery(["getCurrencies"], () => CurrenciesService.getCurrenciesAll().then(data => setCurrencies(data)))
     if (coinId > 0) {
@@ -29,43 +31,65 @@ function CoinGraph({
             setValue(coin?.value ?? 0)
             setYear(coin?.year ?? 0)
             HistoryService.getHistory(coin.currencyId, coin.value, coin.year).then((data) => {
-                setGraphData(data)
+                setHistoryData(data)
             })
         }
     }, [coin])
 
     useEffect(() => {
-        console.log(currencies)
         setCurrency(currencies?.find(c => c.id == coin?.currencyId)?.name ?? "")
     }, [currencies])
 
-    useEffect(() => {
+    const resetSse = () => {
         sse?.close()
-        let currencyId = currencies?.find(c => c.name == currency)?.id
-        if (!currencyId) return
-        console.log("SSE OPENING")
-        sse = new EventSource('https://localhost:44353/History/updates?currencyId=' + currencyId + '&value=' + value + '&year=' + year)
-        sse.onopen = () => {
-            console.log("SSE OPEN")
+        const currencyId = currencies?.find(c => c.name == currency)?.id
+        if (currencyId) {
+            console.log("SSE OPENING")
+            setSse(new EventSource('https://localhost:44353/History/updates?currencyId=' + currencyId + '&value=' + value + '&year=' + year))
         }
-        sse.onerror = () => {
-            console.log("ERROR")
-            sse?.close()
-            sse = undefined
-        }
-        sse.addEventListener("data", (e) => {
-            console.log("data", e.data)
-            graphData?.push(JSON.parse(e.data))
-            console.log(graphData)
-        })
-        sse.addEventListener("close", (e) => {
-            console.log("close", e.data)
-            sse?.close()
-            sse = undefined
-        })
-    }, [graphData, currencies])
+    }
 
-    let sse: EventSource | undefined = undefined;
+    useEffect(() => {
+        if (sse) {
+            sse.onopen = () => {
+                console.log("SSE OPEN")
+            }
+            sse.onerror = () => {
+                console.log("ERROR")
+                sse?.close()
+                setSse(undefined)
+            }
+            sse.addEventListener("data", (e) => {
+                console.log("DATA", e.data)
+                const dataObj = JSON.parse(e.data) as HistoryEntryByCoinDto
+                setGraphData(data => [...data, {
+                    dateTime: new Date(dataObj.dateTime ?? "").toLocaleString(),
+                    entryValue: dataObj.entryValue
+                }])
+            })
+            sse.addEventListener("close", (e) => {
+                console.log("CLOSE", e.data)
+                sse?.close()
+                setSse(undefined)
+            })
+        }
+    }, [sse])
+
+    useEffect(() => {
+        if (historyData) {
+            setGraphData(historyData?.map(h => ({
+                dateTime: new Date(h.dateTime ?? "").toLocaleString(),
+                entryValue: h.entryValue ?? 0
+            })) ?? [])
+            resetSse()
+        }
+    }, [historyData])
+
+    useEffect(() => {
+        if (currencies) {
+            resetSse()
+        }
+    }, [currencies])
 
     window.onbeforeunload = () => {
         sse?.close()
@@ -73,15 +97,18 @@ function CoinGraph({
 
     const updateData = (event: any) => {
         event.preventDefault()
+        HistoryService.getHistory(currencies?.find(c => c.name == currency)?.id, value, year).then((data) => {
+            setHistoryData(data)
+        })
     }
 
     const mock = () => {
         setGraphData([
-            {"dateTime":"2024-01-01T00:00:00","entryValue":2},
-            {"dateTime":"2024-02-01T00:00:00","entryValue":4},
-            {"dateTime":"2024-03-01T00:00:00","entryValue":3},
-            {"dateTime":"2024-04-01T00:00:00","entryValue":3},
-            {"dateTime":"2024-05-01T00:00:00","entryValue":7}
+            { dateTime: "2024-01-01T00:00:00", entryValue: 2},
+            { dateTime: "2024-02-01T00:00:00", entryValue: 4},
+            { dateTime: "2024-03-01T00:00:00", entryValue: 3},
+            { dateTime: "2024-04-01T00:00:00", entryValue: 3},
+            { dateTime: "2024-05-01T00:00:00", entryValue: 7}
         ]) 
     }
 

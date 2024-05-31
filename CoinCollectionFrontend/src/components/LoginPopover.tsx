@@ -17,16 +17,16 @@ function LoginPopover() {
             password: password
         }).then((data) => {
             auth.login(data)
-            toast("Logged in successfully")
+            toast.success("Logged in successfully")
             setUser("")
             setPassword("")
-        }).catch(() => toast("Login Error"))
+        }).catch(() => toast.error("Login Error"))
     }
 
     return auth.isLoggedIn ?
         <Button onClick={() => {
             auth.logout()
-            toast("Logged out successfully")
+            toast.success("Logged out successfully")
             }}>
             Log out
         </Button> :

@@ -36,23 +36,26 @@ namespace CoinCollectionBackend.Web.Controllers
             Response.Headers.TryAdd("Cache-Control", "no-cache");
             Response.Headers.TryAdd("Connection", "keep-alive");
 
-            int id = 0;
-            while (id < 5)
+            Random random = new();
+            for (int i = 0; i < 10; i++)
             {
+                await Task.Delay(10000);
+
                 await Response.WriteAsync("event: data");
                 await Response.WriteAsync("\n");
 
-                HistoryEntryByCoinDto historyEntryByCoinDto = new HistoryEntryByCoinDto
+                HistoryEntryByCoinDto historyEntryByCoinDto = new()
                 {
                     DateTime = DateTime.Now,
-                    EntryValue = id
+                    EntryValue = random.Next(10) + 1
                 };
 
-                await Response.WriteAsync("data: 1");
+                await Response.WriteAsync("data: " + JsonSerializer.Serialize(historyEntryByCoinDto, new JsonSerializerOptions()
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }));
                 await Response.WriteAsync("\n\n");
                 await Response.Body.FlushAsync();
-                await Task.Delay(10000);
-                id++;
             }
             await Response.WriteAsync("event: close");
             await Response.WriteAsync("\n");
