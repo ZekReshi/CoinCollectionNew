@@ -149,24 +149,22 @@ function CoinDetails({
                 </Grid.Col>
                 {
                 auth.isLoggedIn ?
-                <>
                 <Grid.Col span={1}>
                     <Select 
                         data={currencies?.map(c => c.name ?? "ERROR")}
                         value={currency}
                         onChange={(value) => setCurrency(value ?? "")}
                         allowDeselect={false} />
-                </Grid.Col>
+                </Grid.Col> :
                 <Grid.Col span={1}>
-                    <Button onClick={updateCoin}>
-                        Update Coin
-                    </Button>
-                </Grid.Col>
-                </> :
-                <Grid.Col span={2}>
                     {currencies?.find(c => c.id == coin.currencyId)?.name}
                 </Grid.Col>
                 }
+                <Grid.Col span={1}>
+                    <Button onClick={() => navigate('/statistics/' + coinId)}>
+                        Statistics
+                    </Button>
+                </Grid.Col>
                 
                 <Grid.Col span={1}>
                     Value:
@@ -180,8 +178,8 @@ function CoinDetails({
                         onChange={(v) => setValue(v as number)} />
                 </Grid.Col>
                 <Grid.Col span={1}>
-                    <Button onClick={() => setDeleteOpened(true)}>
-                        Delete Coin
+                    <Button onClick={updateCoin}>
+                        Update Coin
                     </Button>
                 </Grid.Col>
                 </> :
@@ -202,8 +200,8 @@ function CoinDetails({
                         onChange={(v) => setYear(v as number)} />
                 </Grid.Col>
                 <Grid.Col span={1}>
-                    <Button onClick={() => navigate('/statistics/' + coinId)}>
-                        Statistics
+                    <Button onClick={() => setDeleteOpened(true)}>
+                        Delete Coin
                     </Button>
                 </Grid.Col>
                 </> :
@@ -264,7 +262,10 @@ function CoinDetails({
                 </>
                 }
             </Grid>
-            <Modal title="Do you really want to delete this coin?" opened={deleteOpened} onClose={() => {}}>
+            <Modal 
+                title="Do you really want to delete this coin?" 
+                opened={deleteOpened} 
+                onClose={() => setDeleteOpened(false)}>
                 <Group>
                     <Button onClick={deleteCoin}>
                         Delete Coin
